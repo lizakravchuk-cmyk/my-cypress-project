@@ -3,6 +3,7 @@ import loginPage from '../pages/LoginPage';
 import profilePage from '../pages/ProfilePage';
 import productPage from '../pages/ProductPage';
 import homePage from '../pages/HomePage';
+import 'cypress-mochawesome-reporter/register';
 
 const existingUser = {
   email: 'customer@practicesoftwaretesting.com',
