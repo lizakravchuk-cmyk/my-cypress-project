@@ -1,0 +1,117 @@
+name: Cypress Cucumber UI Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run smoke tests daily at 8 AM UTC
+    - cron: '0 8 * * *'
+
+jobs:
+  # Smoke tests - Run on every commit
+  smoke-tests:
+    runs-on: ubuntu-latest
+    name: "Smoke Tests (@smoke)"
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Smoke Tests
+        run: npm run test:smoke
+      
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: smoke-test-reports
+          path: reports/html-reports
+
+  # Regression tests - Run on pull requests
+  regression-tests:
+    runs-on: ubuntu-latest
+    name: "Regression Tests (@regression)"
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Regression Tests
+        run: npm run test:regression
+      
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: regression-test-reports
+          path: reports/html-reports
+
+  # Full UI test suite - Run on main branch
+  full-ui-tests:
+    runs-on: ubuntu-latest
+    name: "Full UI Test Suite (@ui)"
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run All UI Tests
+        run: npm run test:ui
+      
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: full-ui-test-reports
+          path: reports/html-reports
+
+  # Critical tests - Run on every commit (fastest)
+  critical-tests:
+    runs-on: ubuntu-latest
+    name: "Critical Path Tests (@critical)"
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run Critical Tests
+        run: npm run test:critical
+      
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: critical-test-reports
+          path: reports/html-reports
