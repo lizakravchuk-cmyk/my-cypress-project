@@ -4,13 +4,30 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:smoke": "cypress run --env tags=\"@smoke\"",
+    "test:regression": "cypress run --env tags=\"@regression\"",
+    "test:ui": "cypress run --env tags=\"@ui\"",
+    "test:login": "cypress run --env tags=\"@login\"",
+    "test:registration": "cypress run --env tags=\"@registration\"",
+    "test:products": "cypress run --env tags=\"@products\"",
+    "test:profile": "cypress run --env tags=\"@profile\"",
+    "test:positive": "cypress run --env tags=\"@positive\"",
+    "test:negative": "cypress run --env tags=\"@negative\"",
+    "test:critical": "cypress run --env tags=\"@critical\"",
+    "test:all": "cypress run",
+    "test:open": "cypress open",
+    "test:smoke:headed": "cypress run --headed --env tags=\"@smoke\"",
+    "test:regression:headed": "cypress run --headed --env tags=\"@regression\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^26.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "@cucumber/tag-expressions": "^11.0.1",
     "cypress": "^15.18.1"
   },
   "devDependencies": {
